@@ -257,6 +257,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void connect(final BleDevice bleDevice) {
+        progressDialog.setCancelable(true);
+        progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                BleManager.getInstance().disconnect(bleDevice);
+            }
+        });
+
         BleManager.getInstance().connect(bleDevice, new BleGattCallback() {
             @Override
             public void onStartConnect() {

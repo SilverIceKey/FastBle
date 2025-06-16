@@ -194,6 +194,8 @@ public class BleBluetooth {
 
     public synchronized void disconnect() {
         isActiveDisconnect = true;
+        mainHandler.removeMessages(BleMsg.MSG_RECONNECT);
+        mainHandler.removeMessages(BleMsg.MSG_CONNECT_OVER_TIME);
         disconnectGatt();
     }
 
@@ -248,7 +250,15 @@ public class BleBluetooth {
                     refreshDeviceCache();
                     closeBluetoothGatt();
 
-                    if (connectRetryCount < BleManager.getInstance().getReConnectCount()) {
+                    if (isActiveDisconnect) {
+                        lastState = LastState.CONNECT_DISCONNECT;
+                        BleManager.getInstance().getMultipleBluetoothController().removeConnectingBle(BleBluetooth.this);
+
+                        BleConnectStateParameter para = (BleConnectStateParameter) msg.obj;
+                        int status = para.getStatus();
+                        if (bleGattCallback != null)
+                            bleGattCallback.onDisConnected(true, bleDevice, bluetoothGatt, status);
+                    } else if (connectRetryCount < BleManager.getInstance().getReConnectCount()) {
                         BleLog.e("Connect fail, try reconnect " + BleManager.getInstance().getReConnectInterval() + " millisecond later");
                         ++connectRetryCount;
 
