@@ -87,7 +87,11 @@ public class MultipleBluetoothController {
         for (Map.Entry<String, BleBluetooth> stringBleBluetoothEntry : bleLruHashMap.entrySet()) {
             stringBleBluetoothEntry.getValue().disconnect();
         }
+        for (Map.Entry<String, BleBluetooth> stringBleBluetoothEntry : bleTempHashMap.entrySet()) {
+            stringBleBluetoothEntry.getValue().disconnect();
+        }
         bleLruHashMap.clear();
+        bleTempHashMap.clear();
     }
 
     public synchronized void destroy() {

@@ -499,7 +499,9 @@ If you want to quickly preview all the functions, you can download APK as a test
 
 - #### Disconnect all devices
 
-	`void disconnectAllDevice()`
+        `void disconnectAllDevice()`
+
+        Disconnects all active connections and cancels any pending connections.
 
         BleManager.getInstance().disconnectAllDevice();
 
